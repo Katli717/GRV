@@ -1,0 +1,5 @@
+BlockFrequency
+NonOverlappingTemplate
+OverlappingTemplate
+ApproximateEntropy
+LinearComplexity
