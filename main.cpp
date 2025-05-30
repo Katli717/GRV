@@ -35,23 +35,23 @@ int main() {
            << "-\n";
 
     LCG lcg(12345);
-    MCG mcg(12345);
-    MT mt;
+    QCG qcg(12345);
+    EnhancedRandom er(12345);
 
     std::string filename = "LCG";
     std::cout << "Testing LCG:\n";
     run_tests(lcg, samples, size, min, max, filename, output);
     run_test_nist(lcg, 5, 32000, min, INT_MAX-1, filename);
     
-    filename = "MCG";
-    std::cout << "Testing MCG:\n";
-    run_tests(mcg, samples, size, min, max, filename, output);
-    run_test_nist(mcg, 5, 32000, min, INT_MAX-1, filename);
+    filename = "QCG";
+    std::cout << "Testing QCG:\n";
+    run_tests(qcg, samples, size, min, max, filename, output);
+    run_test_nist(qcg, 5, 32000, min, INT_MAX-1, filename);
     
-    filename = "MT";
-    std::cout << "Testing MT:\n";
-    run_tests(mt, samples, size, min, max, filename, output);
-    run_test_nist(mt, 5, 32000, min, INT_MAX-1, filename);
+    filename = "EnhancedRandom";
+    std::cout << "Testing EnhancedRandom:\n";
+    run_tests(er, samples, size, min, max, filename, output);
+    run_test_nist(er, 5, 32000, min, INT_MAX-1, filename);
 
     std::system("rm -f output/nist* output/data* ");
 
@@ -62,12 +62,12 @@ int main() {
         run_test_time(lcg, samples, i, min, max, output_time); 
     }
     for (int i = 1000; i < 1000000; i=i+1000) {
-        output_time << "MCG,";
-        run_test_time(mcg, samples, i, min, max, output_time); 
+        output_time << "QCG,";
+        run_test_time(qcg, samples, i, min, max, output_time); 
     }
     for (int i = 1000; i < 1000000; i=i+1000) {
-        output_time << "MT,";
-        run_test_time(mt, samples, i, min, max, output_time); 
+        output_time << "EnhancedRandom,";
+        run_test_time(er, samples, i, min, max, output_time); 
     }
 
     return 0;

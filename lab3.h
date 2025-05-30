@@ -32,34 +32,44 @@ public:
     std::vector<int> generate(int size, int min, int max) override;
 };
 
-class MCG : public RandomGenerator {
+class QCG : public RandomGenerator {
 private:
-    uint64_t a = 6364136223846793005ULL;
-    uint64_t m = (1ULL << 63);
-    uint64_t seed;
-
-    uint64_t mix(uint64_t x) {
-        x ^= x >> 12;
-        x ^= x << 25;
-        x ^= x >> 27;
-        return x * 2685821657736338717ULL;
-    }
-
+  uint64_t seed;
+  uint64_t mix(uint64_t x) {
+    x ^= x >> 21;
+    x ^= x << 35;
+    x ^= x >> 4; 
+    x *= 2685821657736338717ULL; 
+    return x;
+  }
 public:
-    MCG(uint64_t seed) : seed(seed) {}
-
-    std::vector<int> generate(int size, int min, int max) override ;
+  QCG(uint64_t seed) : seed(seed) {
+    seed ^= static_cast<uint64_t>(std::chrono::system_clock::now().time_since_epoch().count());
+  }
+  
+  uint64_t next() {
+    seed = mix(seed * seed); 
+    return seed;
+  }
+    
+  std::vector<int> generate(int size, int min, int max) override;
 };
 
-class MT : public RandomGenerator {
-private:
-    std::mt19937_64 mt;
-    uint64_t seed;
-
+class EnhancedRandom : public RandomGenerator{
 public:
-    MT(uint64_t seed = std::random_device{}()) : seed(seed), mt(seed) {}
+  EnhancedRandom(uint32_t seed) : state(seed) {
+    state ^= static_cast<uint32_t>(std::chrono::system_clock::now().time_since_epoch().count());
+  }
+  uint32_t next() {
+    state ^= (state << 13);
+    state ^= (state >> 17);
+    state ^= (state << 5);
+    return state;
+  }
 
-    std::vector<int> generate(int size, int min, int max) override;
+  std::vector<int> generate(int size, int min, int max) override;
+private:
+  uint32_t state;
 };
 
 double mean(const std::vector<int> &data);

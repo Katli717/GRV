@@ -19,28 +19,24 @@ std::vector<int> LCG::generate(int size, int min, int max) {
   return numbers;
 }
 
-std::vector<int> MCG::generate(int size, int min, int max) {
+std::vector<int> QCG::generate(int size, int min, int max) {
   std::vector<int> numbers;
   numbers.reserve(size);
-  uint64_t range = uint64_t(max) - uint64_t(min) + 1;
+          
   for (int i = 0; i < size; ++i) {
-    seed = a * seed; 
-    uint64_t val = mix(seed);
-    int res = min + static_cast<int>(val % range);
-    numbers.push_back(res);
+    int random_number = next() % (max - min + 1) + min;
+    numbers.push_back(random_number);
   }
   return numbers;
 }
 
-std::vector<int> MT::generate(int size, int min, int max) {
-  std::uniform_int_distribution<int> dist(min, max);
+std::vector<int> EnhancedRandom::generate(int size, int min, int max) {
   std::vector<int> numbers;
   numbers.reserve(size);
-
-  for (int i = 0; i < 100; ++i) mt();
-
+    
   for (int i = 0; i < size; ++i) {
-    numbers.push_back(dist(mt));
+    int random_number = next() % (max - min + 1) + min; 
+    numbers.push_back(random_number);
   }
   return numbers;
 }
